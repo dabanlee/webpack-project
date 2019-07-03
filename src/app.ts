@@ -1,1 +1,1 @@
-export default function () {}
+import './styles/app.scss'

@@ -1,5 +1,6 @@
 const path = require('path');
 const HTML = require('html-webpack-plugin');
+const ExtractCSS = require('extract-text-webpack-plugin')
 
 const configure = {
     entry: {
@@ -28,6 +29,16 @@ const configure = {
                     transpileOnly: true,
                 },
             }],
+        }, {
+            test: /\.(scss|css)$/,
+            use: ExtractCSS.extract({
+                publicPath: './',
+                fallback: `style-loader`,
+                use: [
+                    'css-loader',
+                    'postcss-loader',
+                ],
+            }),
         }, {
             test: /\.(mp3|mp4)$/,
             use: [{
@@ -59,6 +70,9 @@ const configure = {
         }],
     },
     plugins: [
+        new ExtractCSS('css/app.css?[hash:8]', {
+            allChunks: true,
+        }),
         new HTML({
             filename: `index.html`,
             template: path.resolve('src/template/index.html'),
