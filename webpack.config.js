@@ -1,6 +1,6 @@
 const path = require('path');
 const HTML = require('html-webpack-plugin');
-const ExtractCSS = require('extract-text-webpack-plugin')
+const ExtractCSS = require('mini-css-extract-plugin')
 
 const configure = {
     entry: {
@@ -31,14 +31,16 @@ const configure = {
             }],
         }, {
             test: /\.(scss|css)$/,
-            use: ExtractCSS.extract({
-                publicPath: './',
-                fallback: `style-loader`,
-                use: [
-                    'css-loader',
-                    'postcss-loader',
-                ],
-            }),
+            use: [
+                {
+                    loader: ExtractCSS.loader,
+                    options: {
+                        publicPath: '../',
+                    }
+                },
+                'css-loader',
+                'postcss-loader',
+            ],
         }, {
             test: /\.(mp3|mp4)$/,
             use: [{
