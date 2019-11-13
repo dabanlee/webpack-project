@@ -1,6 +1,7 @@
 const path = require('path');
 const HTML = require('html-webpack-plugin');
 const ExtractCSS = require('mini-css-extract-plugin')
+const getHost = require('get-host')
 
 const configure = {
     entry: {
@@ -72,8 +73,8 @@ const configure = {
         }],
     },
     plugins: [
-        new ExtractCSS('css/app.css?[hash:8]', {
-            allChunks: true,
+        new ExtractCSS({
+            filename: 'css/app.css?[hash:8]',
         }),
         new HTML({
             filename: `index.html`,
@@ -81,6 +82,16 @@ const configure = {
             inject: true,
         }),
     ],
+    devServer: {
+        contentBase: path.resolve(__dirname, 'dist'),
+        disableHostCheck: true,
+        compress: true,
+        port: '8080',
+        host: getHost(),
+        watchContentBase: true,
+        overlay: true,
+        writeToDisk: true
+    },
     devtool: 'cheap-module-source-map',
 };
 
